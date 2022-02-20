@@ -1,0 +1,204 @@
+<style>
+    body{
+        box-sizing: border-box;
+        background-image:url("contact.png");
+    }
+
+    .img{
+        width:50px;
+        height:50px;
+        border-radius: 50px 50px;
+       
+    }
+    h1{
+        text-shadow: 5px 3px 2px #1ea7dce0;
+        color: #253aca;
+        height:5px;
+        text-align: left;
+        padding-left: 25px;
+    }
+    .inputText{
+        width:250px;
+        height:40px;
+        border-radius:50px;
+        margin-right:5px;
+        margin-bottom:10px;
+        border-color:rgba(255, 255, 255, 0.644);
+        color: #253aca;
+        background-color: white;
+    }
+    
+    .todo{
+        /* border:1px solid rgb(93, 93, 240); */
+        width:360px;
+        margin: auto;
+    }
+    .btn{
+        border:none;
+        margin-bottom:5px;
+    }
+    .headerInput{
+        background-color: rgba(255, 255, 255, 0.829);
+       border-radius:30px 30px 0px 0px;
+    }
+    .contactList{
+        font-family: sans-serif;
+        font-size: 15px;
+        text-align: left;
+        margin-top:0px;
+        background-color: rgba(100, 148, 237, 0.616);
+        border-radius: 35px 35px 0px 0px;
+       
+    }
+    .list{
+        background-color: rgba(255, 255, 255, 0.89);
+
+    }
+
+
+    .listLi{
+        
+        margin-bottom: 10px;
+        list-style-type: none;
+        color: rgba(255, 255, 255, 0.89);
+    
+    }
+    .phNoSpan{
+        display:inline-block;
+        width:200px;
+    }
+    .img1{
+        width:25px;
+        height:25px;
+        
+    }
+</style>
+
+
+<div class="todo">
+    <div class="headerInput">
+        <h1>To Do List</h1>
+        <div id="inputText">
+            <input type="text" class="inputText" id="IdText" value="Contact Name">
+            <button class="btn" onclick="ContactAdd()"><img src="sign-up.svg" class="img"></button>
+            <br>
+            <!-- <input type="text" class="inputNumber" id="inputNumber" placeholder="Phone Number"> -->
+        </div>
+    </div>
+    <div class="list" id="list">
+        <ul class="contactList" id="contactList">
+            <li class="listLi" id="list1">
+                <span class="phNoSpan" id="text1">Fire Station</span><br>
+                <span class="phNoSpan" id="phone1">191</span>
+                <button class="btn" id="listDel1" onclick="ListDelete(`${1}`)"><img src="delete-account.svg" class="img1"></button>
+                <button class="btn" id="listEdit1" onclick="ListEdit(`${1}`)"><img src="edit.png" class="img1"></button>
+                 
+            </li>
+            <li class="listLi" id="list2">
+                <span class="phNoSpan" id="text2">Police Station</span><br>
+                <span class="phNoSpan" id="phone2">199</span>
+                <button class="btn" id="listDel2" onclick="ListDelete(`${2}`)"><img src="delete-account.svg" class="img1"></button>
+                <button class="btn" id="listEdit2" onclick="ListEdit(`${2}`)"><img src="edit.png" class="img1"></button>
+                 
+            </li>
+            <li class="listLi" id="list3">
+                <span class="phNoSpan" id="text3">Ambulance</span><br>
+                <span class="phNoSpan" id="phone3">192</span>
+                <button class="btn" id="listDel3" onclick="ListDelete(`${3}`)"><img src="delete-account.svg" class="img1"></button>
+                <button class="btn" id="listEdit3" onclick="ListEdit(`${3}`)"><img src="edit.png" class="img1"></button>
+                 
+            </li>
+                                           
+        </ul>
+    </div>
+</div>
+<script>
+    function textFilter(x){
+        if(x){
+            //console.log(x.length);
+            // if(x.length >= minTextLength){
+            //     return x;
+            // }else{
+            //     alert("Min Text length is 3");
+            //     return false;
+            // }
+            return x;
+        }
+        else{
+            alert("Input text is Empty");
+           // return false;
+        }
+    }
+    function NoFilter(x){
+        //let y=Number(x);
+        if(x.length==11 || x.length==3){
+            return x;
+        }else{
+            
+            alert("Phone Number must have 9 digits.")
+        }
+    }
+    let i=4;
+    function showList(text,no){
+        return `
+        <li class="listLi"  class="btn" id="list${i}" onclick="ListDelete(${i})">
+            <span class="phNoSpan" id="text${i}">${text}</span><br>
+            <span class="phNoSpan" id="phone${i}">${no}</span>
+            
+            <button class="btn" id="listDelete${i}" onclick="ListDelete(${i})"><img src="delete-account.svg" class="img1"></button>
+
+            <button class="btn" id="listEdit${i}" onclick="ListEdit(${i})"><img src="edit.png" class="img1"></button>
+             
+        </li>
+        `;
+    }
+    function ContactAdd(){
+        let input=document.getElementById("IdText");
+        console.log(input);
+        let newText=textFilter(input.value);
+
+        let newNo=prompt("Add Phone Number","09123456789");
+          
+          
+        //console.log(newNo);
+        let newPh=NoFilter(newNo);
+        //console.log(newNo);
+        
+
+        let list=document.getElementById("contactList");
+        if(newPh && newText){
+            
+                list.innerHTML+=showList(newText,newPh);
+                input.value=" ";
+                i++;
+        }else{
+            alert("You Need To Fill Both Contact Name and Phone No");
+        }
+        
+    }
+
+    function ListDelete(listId){
+        let ul=document.getElementById("contactList");
+        let current=document.getElementById(`list${listId}`);
+        
+        let currentText=document.getElementById(`text${listId}`).innerHTML;
+        
+        let confirmDel=confirm(`Are you sure to delete ${currentText}`);
+        if(confirmDel){
+            ul.removeChild(current);
+        }
+    }
+
+    function ListEdit(listId){
+        let oldContact=document.getElementById(`text${listId}`);
+        let editContact=prompt("Say Something",oldContact.innerHTML);
+        //console.log(editContact);
+        let oldNo=document.getElementById(`phone${listId}`);
+        let editNo=prompt("Say Something",oldNo.innerHTML);
+        //console.log(editNo);
+        if(textFilter(editContact) && NoFilter(editNo)){
+            oldContact.innerHTML=editContact;
+            oldNo.innerHTML=editNo;
+        }
+    }
+</script>
